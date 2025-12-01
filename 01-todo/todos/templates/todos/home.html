@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}TODO List{% endblock %}
+
+{% block content %}
+<h1>📝 My TODO List</h1>
+
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'todo_create' %}" class="btn">➕ Add New TODO</a>
+</div>
+
+{% if todos %}
+<div style="display: grid; gap: 15px;">
+    {% for todo in todos %}
+    <div
+        style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: {% if todo.resolved %}#d4edda{% else %}#fff{% endif %}; transition: all 0.3s;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div style="flex: 1;">
+                <h3
+                    style="margin-bottom: 10px; {% if todo.resolved %}text-decoration: line-through; color: #666;{% endif %}">
+                    {{ todo.title }}
+                </h3>
+                {% if todo.description %}
+                <p style="color: #666; margin-bottom: 10px;">{{ todo.description }}</p>
+                {% endif %}
+                {% if todo.due_date %}
+                <p style="color: #999; font-size: 14px;">📅 Due: {{ todo.due_date|date:"M d, Y" }}</p>
+                {% endif %}
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{% url 'todo_toggle' todo.pk %}"
+                    class="btn {% if todo.resolved %}btn-danger{% else %}btn-success{% endif %}"
+                    style="font-size: 14px; padding: 8px 15px;">
+                    {% if todo.resolved %}❌ Unresolve{% else %}✅ Resolve{% endif %}
+                </a>
+                <a href="{% url 'todo_edit' todo.pk %}" class="btn" style="font-size: 14px; padding: 8px 15px;">✏️
+                    Edit</a>
+                <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger"
+                    style="font-size: 14px; padding: 8px 15px;">🗑️ Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div style="text-align: center; padding: 40px; color: #999;">
+    <p style="font-size: 18px;">No TODOs yet! Click "Add New TODO" to get started.</p>
+</div>
+{% endif %}
+{% endblock %}
