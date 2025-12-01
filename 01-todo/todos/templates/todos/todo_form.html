@@ -5,6 +5,75 @@
 {% block content %}
 <h1>{% if object %}✏️ Edit{% else %}➕ Create{% endif %} TODO</h1>
 
+<!-- Add Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<form method="post" style="margin-top: 30px;">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title:</label>
+        {{ form.title }}
+        <style>
+            input[type="text"],
+            textarea,
+            input[type="date"],
+            input[type="checkbox"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+        </style>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+        {{ form.description }}
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Due Date:</label>
+        {{ form.due_date }}
+    </div>
+
+    {% if object %}
+    <div style="margin-bottom: 20px;">
+        <label style="display: flex; align-items: center; gap: 10px;">
+            {{ form.resolved }}
+            <span style="font-weight: bold;">Mark as Resolved</span>
+        </label>
+    </div>
+    {% endif %}
+
+    <div style="display: flex; gap: 10px;">
+        <button type="submit" class="btn">💾 Save</button>
+        <a href="{% url 'todo_list' %}" class="btn btn-danger">❌ Cancel</a>
+    </div>
+</form>
+
+<!-- Add Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#id_due_date", {
+        dateFormat: "Y-m-d",
+        minDate: "today"
+    });
+</script>
+{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Edit{% else %}Create{% endif %} TODO{% endblock %}
+
+{% block content %}
+<h1>{% if object %}✏️ Edit{% else %}➕ Create{% endif %} TODO</h1>
+
 <form method="post" style="margin-top: 30px;">
     {% csrf_token %}
 
